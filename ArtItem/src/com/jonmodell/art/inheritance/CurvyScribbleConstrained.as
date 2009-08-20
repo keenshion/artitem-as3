@@ -1,14 +1,14 @@
-package com.jonmodell.art
+package com.jonmodell.art.inheritance
 {
 	import flash.events.TimerEvent;
 
-	public class CurvyScribble extends ArtItem
+	public class CurvyScribbleConstrained extends ArtItem
 	{
 		
 		private var widthConstraint:Number;
 		private var heightContstraint:Number;
 		
-		public function CurvyScribble(
+		public function CurvyScribbleConstrained(
 			iterations:Number 			= 300, 
 			rate:Number 				= 100, 
 			color:uint 					= 0x000000, 

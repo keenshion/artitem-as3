@@ -65,7 +65,7 @@
 		<![CDATA[
 			import mx.collections.ArrayCollection;
 			import fl.motion.Color;
-			import com.jonmodell.art.*;
+			import com.jonmodell.art.inheritance.*;
 			
 			private function onApplicationComplete(e:Event):void{
 				this.stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
@@ -132,6 +132,9 @@
 				art1.y = drawY;
 				canvas.rawChildren.addChild(art1);
 				art1.draw();
+				
+				if(art1.hasOwnProperty('colors'))
+					trace ('has colors');
 			}
 			
 			[Bindable]

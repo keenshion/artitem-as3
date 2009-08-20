@@ -1,4 +1,4 @@
-package com.jonmodell.art
+package com.jonmodell.art.inheritance
 {
 	import flash.display.Sprite;
 	import flash.events.TimerEvent;
@@ -8,31 +8,34 @@ package com.jonmodell.art
 	
 	public class FlyingCircles extends ArtItem
 	{
-		private var countPerCircle:Number;
-		private var sway:Number;
-		private var fall:Number;
+		private var sway					:Number;
+		private var fall					:Number;
+		
+		public var cycle					: Number = 0;
+		
+		public var iterationsPerCycle		: Number = 60;
 		
 		public function FlyingCircles(
-			iterations:Number = 300, 
-			rate:Number = 100, 
-			color:uint = 0x000000,
-			sway:Number = 500,
-			fall:Number = 800,
-			countPerCircle:Number = 60
+			iterations 			: Number 	= 300, 
+			rate 				: Number 	= 100, 
+			color 				: uint 		= 0x000000,
+			sway 				: Number 	= 500,
+			fall 				: Number 	= 800,
+			iterationsPerCycle 	: Number	= 60
 		){
 			super();
 			this.iterations 	= iterations;
 			this.rate 			= rate;
-			this.increment 		= (Math.PI *2)/countPerCircle;
+			this.increment 		= (Math.PI *2)/iterationsPerCycle;
 			this.color 			= color;
-			this.countPerCircle = countPerCircle;
 			this.sway 			= sway;
 			this.fall			= fall;
+			this.iterationsPerCycle = iterationsPerCycle;
 		}
 		
 		override protected function update(e:TimerEvent):void{
 			
-			if(counter%countPerCircle == 0) cir++;
+			if(counter%iterationsPerCycle == 0) cycle++;
 			
 			for(var c:Number = 0; c < 10; c++){
 				// a sprite to add

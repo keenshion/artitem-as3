@@ -1,33 +1,36 @@
-package com.jonmodell.art
+package com.jonmodell.art.inheritance
 {
 	import flash.events.TimerEvent;
-	import flash.utils.Timer;
 
 	public class SharpScribble extends ArtItem
 	{
 		
-		private var widthConstraint:Number;
-		private var heightContstraint:Number;
+		public var widthConstraint			:Number;
+		public var heightContstraint		:Number;
+		
+		public var cycle					: Number = 0;
+		
+		public var iterationsPerCycle		: Number = 100;
 		
 		public function SharpScribble(
-			iterations:Number 			= 300, 
-			rate:Number 				= 100, 
-			color:uint 					= 0x000000, 
-			widthConstraint:Number 		= 400,
-			heightContstraint:Number 	= 400){
+			iterations				:Number = 300, 
+			rate					:Number = 100, 
+			color					:uint 	= 0x000000, 
+			widthConstraint			:Number = 400,
+			heightContstraint		:Number = 400){
 			
 			super();
-			this.iterations 			= iterations;
-			this.rate 					= rate;
-			this.increment 				= (Math.PI *2)/iterations;
-			this.color 					= color;
-			this.widthConstraint 		= widthConstraint;
-			this.heightContstraint 		= heightContstraint;
+			this.iterations 				= iterations;
+			this.rate 						= rate;
+			this.increment 					= (Math.PI *2)/iterations;
+			this.color 						= color;
+			this.widthConstraint 			= widthConstraint;
+			this.heightContstraint 			= heightContstraint;
 		}
 
 		override protected function update(e:TimerEvent):void{
 			
-			if(counter%100 == 0) cir++;
+			if(counter%iterationsPerCycle == 0) cycle++;
 			
 			this.graphics.lineStyle(0.5,color,0.5);
 			

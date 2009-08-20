@@ -1,28 +1,43 @@
-package com.jonmodell.art
+package com.jonmodell.art.inheritance
 {
 	import flash.display.Sprite;
 	import flash.events.TimerEvent;
 	import flash.utils.Timer;
+	
+	import mx.collections.ArrayCollection;
 
 	public class ArtItem extends Sprite implements IArtItem
 	{
+		// every repeating item needs a timer
 		protected var timer 		: Timer;
 		
-		protected var counter		: Number;
+		// and a counter
+		public var counter		: Number;
 		
-		protected var iterations 	: Number;
-		protected var increment	: Number;
-		protected var color		: uint;
-		protected var rate		: Number;
+		// this property is set to determine how many repeats
+		public var iterations 	: Number;
 		
+		// the repeat rate in milliseconds
+		public var rate			: Number;
+		
+		public var increment		: Number;
+		
+		public var color			: uint;
+
 		// storage for the last values
 		protected var x0			: Number;
+		
 		protected var y0			: Number;
 		
 		protected var width0		: Number;
+		
 		protected var height0		: Number;
 		
-		protected var cir			: Number = 0;
+		
+		[Bindable] private var _propertyCollection: ArrayCollection;
+		[Bindable] public function get propertyCollection():ArrayCollection { return _propertyCollection; }
+		public function set propertyCollection(val:ArrayCollection):void { _propertyCollection = val; }
+		
 		
 		public function ArtItem()
 		{
