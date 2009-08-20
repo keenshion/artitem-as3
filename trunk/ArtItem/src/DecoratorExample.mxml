@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application 
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	layout="absolute" 
+	backgroundGradientAlphas="[1.0, 1.0]" 
+	backgroundGradientColors="[#FFFFFF, #FFFFFF]"
+	applicationComplete="onApplicationComplete(event)"
+	>
+	
+	<mx:states>
+		<mx:State name="canvasOnly" enterState="this.setFocus()">
+			<mx:RemoveChild target="{settings}"/>
+			<mx:SetStyle target="{canvas}" name="top" value="0"/>
+			<mx:SetStyle target="{canvas}" name="bottom" value="0"/>
+			<mx:SetStyle target="{canvas}" name="right" value="0"/>
+			<mx:SetStyle target="{canvas}" name="left" value="0"/>
+		</mx:State>
+	</mx:states>
+	
+	<mx:Canvas id="canvas" clipContent="true" click="onMouseDown(event)"
+		borderStyle="solid" backgroundColor="#FFFFFF"
+	 	left="0" top="0" bottom="0"
+ right="0"/>
+	 
+	 <mx:Canvas id="settings" 
+		y="10" height="556" left="-3" 
+	 	borderStyle="solid" borderThickness="1" 
+	 	borderColor="#D5D5D5" backgroundColor="#EAEAEA"
+	  width="183">
+		<mx:Button label="canvas only"  click="currentState = 'canvasOnly'" bottom="10" right="10"/>
+		<mx:ColorPicker y="271" selectedColor="#FFFFFF" id="startCP" x="150"/>
+		<mx:ColorPicker y="299" id="endCP" x="150"/>
+		<mx:Label y="273" text="start" x="112"/>
+		<mx:Label y="301" text="end" x="116"/>
+		
+		<mx:List id="ItemList" dataProvider="{itemsProvider}"  
+			x="10" 
+		 top="26" selectedIndex="0" height="123" width="162"/>
+		<mx:Label x="140" y="7" text="Item"/>
+		<mx:NumericStepper id="widthNS" 
+			y="157" width="72" 
+			maximum="3000" value="1000"
+		 x="100"/>
+		<mx:NumericStepper id="heightNS" 
+			y="185" width="72" 
+			maximum="3000" value="1000"
+		 x="100"/>
+		<mx:NumericStepper id="rateNS" 
+			y="241" value="100" 
+			maximum="3000"
+		 x="100"/>
+		<mx:NumericStepper id="iterationsNS" 
+			y="213" value="300" 
+			maximum="3000"
+		 x="100"/>
+		<mx:Label y="159" text="width" x="59"/>
+		<mx:Label y="187" text="height" x="52"/>
+		<mx:Label y="215" text="steps" x="57"/>
+		<mx:Label y="243" text="rate" x="65"/>
+		<mx:Button label="reset settings" click="resetConstraints()" bottom="40" right="10"/>
+		<mx:Button label="add item" click="addItem()" bottom="70" right="10"/>
+		<mx:Label y="332" text="line width" x="10"/>
+		<mx:NumericStepper y="355" maximum="150" value="3.00" id="LineWidthToNS" x="106" stepSize=".01"/>
+		<mx:NumericStepper y="355" maximum="150" value="0" id="LineWidthFromNS" x="10" stepSize=".01"/>
+		<mx:Label x="82.5" y="357" text="to"/>
+		<mx:Label y="383" text="line width" x="10"/>
+		<mx:NumericStepper y="406" maximum="150" value="3.00" id="AlphaToNS" x="106" stepSize=".01"/>
+		<mx:NumericStepper y="406" maximum="150" value="0" id="AlphaFromNS" x="10" stepSize=".01"/>
+		<mx:Label x="82.5" y="408" text="to"/>
+		
+	</mx:Canvas>
+	
+	<mx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			import com.jonmodell.art.decorator.*;
+
+			import mx.events.FlexEvent;
+			
+			import fl.motion.Color;
+			
+			private function onApplicationComplete(e:FlexEvent):void{
+
+			}
+			
+			private function resetConstraints():void{
+				widthNS.value 		= this.stage.width;
+				heightNS.value 		= this.stage.height;
+				iterationsNS.value	= 300;
+				rateNS.value		= 100;
+			}
+			
+			private function addItem():void{
+				create(stage.width/2, stage.height/2);
+			}
+			
+			private function onMouseDown(e:MouseEvent):void{
+				create((e.currentTarget as Canvas).mouseX,(e.currentTarget as Canvas).mouseY);
+			}
+			
+			private var artItem:IArtSprite;
+			
+			private function create(drawX:Number, drawY:Number):void{
+				var color:uint = fl.motion.Color.interpolateColor(startCP.selectedColor, endCP.selectedColor, Math.random());
+				
+				trace(describeType(CurvyScribbleDecorator));
+				
+				artItem = new ArtSprite();
+				artItem = new CurvyScribbleDecorator(artItem,color,50,widthNS.value,heightNS.value,LineWidthFromNS.value,LineWidthToNS.value);
+				
+				artItem = new RepeaterDecorator(artItem,300);
+				
+				artItem.x = drawX;
+				artItem.y = drawY;
+				
+				canvas.rawChildren.addChild(artItem as Sprite);
+				
+				artItem.start();
+				
+				/* var art1:ArtItem;
+
+				switch(this.ItemList.selectedItem.label){
+					case 'Curvy Scribble':
+						art1 = new CurvyScribble(iterationsNS.value, rateNS.value, color, widthNS.value, heightNS.value);
+						break;
+					case 'Sharp Scribble':
+						art1 = new SharpScribble(iterationsNS.value, rateNS.value, color, widthNS.value, heightNS.value);
+						break;
+					case 'Flying Circles':
+						art1 = new FlyingCircles(iterationsNS.value, rateNS.value, color, widthNS.value, heightNS.value, Var1NS.value);
+						break;
+					case 'Concentric Circles':
+						art1 = new ConcentricCircles(iterationsNS.value, rateNS.value, color, widthNS.value, heightNS.value, Var1NS.value);
+						break;
+					default:
+						break;
+				}
+				
+				art1.x = drawX;
+				art1.y = drawY;
+				canvas.rawChildren.addChild(art1);
+				art1.draw();
+				
+				if(art1.hasOwnProperty('colors'))
+					trace ('has colors'); */
+			}
+			
+			[Bindable]
+			private var itemsProvider: ArrayCollection = new ArrayCollection([
+				{label:'Curvy Scribble',data:1},
+				{label:'Sharp Scribble',data:2},
+				{label:'Flying Circles',data:3},
+				{label:'Concentric Circles',data:4}
+			])
+			
+			
+		/*
+		//////////////////////////////////////////////////
+		// SAVE IMAGE FUNCTIONS
+		
+			private var saveReference:FileReference;
+			
+			public function saveImage():void{
+				
+				var tf:TextField = new TextField();
+				tf.autoSize = 'left';
+
+				var format:TextFormat = new TextFormat();
+            	format.font = "Verdana";
+            	format.color = 0x000000;
+            	format.size = 10;
+				
+				tf.defaultTextFormat = format;
+				tf.htmlText = "Source: Federal Reserve Board &#169; "+ new Date().getFullYear().toString();
+				
+				
+				
+				var bd:BitmapData = new BitmapData(this.lc.width, this.lc.height + this.legend.height + 20);
+				bd.draw(legend);
+				
+				var matrix:Matrix = new Matrix(1,0,0,1,0,legend.height);
+				bd.draw(lc, matrix);
+
+				matrix = new Matrix(1,0,0,1,20,legend.height + lc.height);
+				bd.draw(tf,matrix);
+				
+				var jpe:JPEGEncoder = new JPEGEncoder(70);
+				
+				var ba:ByteArray = jpe.encode(bd);
+				
+				saveReference = new FileReference();
+				saveReference.addEventListener(Event.CANCEL, onCancel);
+				saveReference.addEventListener(IOErrorEvent.IO_ERROR, onSaveIOError);
+				saveReference.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onSaveSecurityError);
+				saveReference.addEventListener(Event.COMPLETE, onSaved);
+                
+                try
+                {
+                    saveReference.save(ba, "DDPChart.jpg");
+                }
+                catch(refErr:ReferenceError)
+                {
+                    Alert.show("This example requires Flash Player 10 or above to work.  You appear to have a player less than version 10.\n Version: " + Capabilities.version, "Error");
+                }
+                catch(err:Error){}
+
+			}
+			
+			private function destroySaveReference():void{
+                if(saveReference)
+                {
+                    saveReference.removeEventListener(Event.CANCEL, onCancel);
+                    saveReference.removeEventListener(IOErrorEvent.IO_ERROR, onSaveIOError);
+                    saveReference.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, onSaveSecurityError);
+                    saveReference = null;
+                }
+            }
+            
+            private function onCancel(event:Event):void{
+                destroySaveReference();
+            }
+            
+            private function onSaveIOError(event:IOErrorEvent):void{
+                destroySaveReference();
+            }
+            
+            private function onSaveSecurityError(event:SecurityErrorEvent):void{
+                destroySaveReference();
+            }
+            
+            private function onSaved(event:Event):void{
+                destroySaveReference();
+                Alert.show("Image saved.");
+            }
+            
+		// END SAVE IMAGE FUNCTIONS
+		///////////////////////////////////////////////
+		*/
+		
+		]]>
+	</mx:Script>
+	
+</mx:Application>

@@ -1,19 +1,25 @@
-package com.jonmodell.art
+package com.jonmodell.art.inheritance
 {
 	import flash.events.TimerEvent;
+	
+	import mx.collections.ArrayCollection;
 
-	public class CurvyScribbleConstrained extends ArtItem
+	public class CurvyScribble extends ArtItem
 	{
+		public var widthConstraint			: Number;
 		
-		private var widthConstraint:Number;
-		private var heightContstraint:Number;
+		public var heightContstraint		: Number;
 		
-		public function CurvyScribbleConstrained(
+		public var cycle					: Number = 0;
+		
+		public var iterationsPerCycle		: Number = 100;
+		
+		public function CurvyScribble(
 			iterations:Number 			= 300, 
 			rate:Number 				= 100, 
 			color:uint 					= 0x000000, 
-			widthConstraint:Number 		= 400,
-			heightContstraint:Number 	= 400){
+			widthConstraint:Number 		= 600,
+			heightContstraint:Number 	= 600){
 			
 			super();
 			this.iterations 			= iterations;
@@ -24,10 +30,16 @@ package com.jonmodell.art
 			this.heightContstraint 		= heightContstraint;
 		}
 		
+		override public function get propertyCollection():ArrayCollection{
+			return new ArrayCollection([
+				{name:'width constraint', property: 'widthConstraint', type:'Number', value:'600'}
+			]);
+		}
+		
 		
 		override protected function update(e:TimerEvent):void{
 			
-			if(counter%100 == 0) cir++;
+			if(counter%iterationsPerCycle == 0) cycle++;
 			
 			this.graphics.lineStyle(0.01*counter,color,0.3 + 0.7*(counter/iterations));
 			
@@ -44,14 +56,12 @@ package com.jonmodell.art
 			var cx:Number = -25 + (Math.random()*50) + x0;
 			var cy:Number = -25 + (Math.random()*50) + y0;
 
-			
 			this.graphics.curveTo(cx,cy,x1,y1);
 			
 			x0 = x1;
 			y0 = y1;
 			
 			counter++;
-			
 		}
 		
 	}

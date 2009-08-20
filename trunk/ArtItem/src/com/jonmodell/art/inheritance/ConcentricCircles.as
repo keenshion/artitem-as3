@@ -1,4 +1,4 @@
-package com.jonmodell.art
+package com.jonmodell.art.inheritance
 {
 	import flash.display.Sprite;
 	import flash.events.TimerEvent;
@@ -8,10 +8,14 @@ package com.jonmodell.art
 	
 	public class ConcentricCircles extends ArtItem
 	{
-		private var countPerCircle:Number;
+		private var countPerCircle		:Number;
 		
-		private var widthConstraint:Number;
-		private var heightContstraint:Number;
+		private var widthConstraint		:Number;
+		private var heightContstraint	:Number;
+		
+		private var cycle				: Number = 0;
+		
+		public var colors				: Array;
 		
 		public function ConcentricCircles(
 			iterations:Number 			= 300, 
@@ -20,7 +24,6 @@ package com.jonmodell.art
 			widthConstraint:Number 		= 400,
 			heightContstraint:Number 	= 400, 
 			countPerCircle:Number 		= 60)
-			
 			{
 			super();
 			this.iterations 	= iterations;
@@ -35,13 +38,13 @@ package com.jonmodell.art
 		
 		override protected function update(e:TimerEvent):void{
 			
-			if(counter%countPerCircle == 0) cir++;
+			if(counter%countPerCircle == 0) cycle++;
 			
 			// a sprite to add
 			var sp:Sprite = new Sprite();
 				
-			width0 		= 2*cir;
-			height0 	= 2*cir;
+			width0 		= 2*cycle;
+			height0 	= 2*cycle;
 				
 			sp.graphics.beginFill(Math.random()*color, 0.2);
 			sp.graphics.drawRect(0,0,width0,height0);
@@ -49,8 +52,8 @@ package com.jonmodell.art
 			
 			sp.x = sp.y = 0;
 				
-			x0 = sp.x + Math.sin(increment*counter)*30*cir;
-			y0 = sp.y + Math.cos(increment*counter)*30*cir;
+			x0 = sp.x + Math.sin(increment*counter)*30*cycle;
+			y0 = sp.y + Math.cos(increment*counter)*30*cycle;
 			
 			sp.rotation = -(increment*counter)/(Math.PI/180);
 				
