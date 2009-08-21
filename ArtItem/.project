@@ -3,7 +3,6 @@
 	<name>ArtItem</name>
 	<comment></comment>
 	<projects>
-		<project>TweenLite</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
