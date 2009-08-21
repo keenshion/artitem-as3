@@ -27,47 +27,53 @@
 	 	borderStyle="solid" borderThickness="1" 
 	 	borderColor="#D5D5D5" backgroundColor="#EAEAEA"
 	  width="183">
-		<mx:Button label="canvas only"  click="currentState = 'canvasOnly'" bottom="10" right="10"/>
-		<mx:ColorPicker y="271" selectedColor="#FFFFFF" id="startCP" x="150"/>
-		<mx:ColorPicker y="299" id="endCP" x="150"/>
-		<mx:Label y="273" text="start" x="112"/>
-		<mx:Label y="301" text="end" x="116"/>
 		
-		<mx:List id="ItemList" dataProvider="{itemsProvider}"  
-			x="10" 
-		 top="26" selectedIndex="0" height="123" width="162"/>
-		<mx:Label x="140" y="7" text="Item"/>
-		<mx:NumericStepper id="widthNS" 
-			y="157" width="72" 
-			maximum="3000" value="1000"
-		 x="100"/>
-		<mx:NumericStepper id="heightNS" 
-			y="185" width="72" 
-			maximum="3000" value="1000"
-		 x="100"/>
-		<mx:NumericStepper id="rateNS" 
-			y="241" value="100" 
-			maximum="3000"
-		 x="100"/>
-		<mx:NumericStepper id="iterationsNS" 
-			y="213" value="300" 
-			maximum="3000"
-		 x="100"/>
-		<mx:Label y="159" text="width" x="59"/>
-		<mx:Label y="187" text="height" x="52"/>
-		<mx:Label y="215" text="steps" x="57"/>
-		<mx:Label y="243" text="rate" x="65"/>
-		<mx:Button label="reset settings" click="resetConstraints()" bottom="40" right="10"/>
-		<mx:Button label="add item" click="addItem()" bottom="70" right="10"/>
-		<mx:Label y="332" text="line width" x="10"/>
-		<mx:NumericStepper y="355" maximum="150" value="3.00" id="LineWidthToNS" x="106" stepSize=".01"/>
-		<mx:NumericStepper y="355" maximum="150" value="0" id="LineWidthFromNS" x="10" stepSize=".01"/>
-		<mx:Label x="82.5" y="357" text="to"/>
-		<mx:Label y="383" text="line width" x="10"/>
-		<mx:NumericStepper y="406" maximum="150" value="3.00" id="AlphaToNS" x="106" stepSize=".01"/>
-		<mx:NumericStepper y="406" maximum="150" value="0" id="AlphaFromNS" x="10" stepSize=".01"/>
-		<mx:Label x="82.5" y="408" text="to"/>
+		<mx:Label 			text="Item"				x="140" y="7" />
+		<mx:List  			id="ItemList" 			x="10"	top="26"  	height="123" 	width="162"
+			dataProvider="{itemsProvider}" 	selectedIndex="0" />
 		
+		<mx:Label 			text="width" 			x="59" 	y="159"  />
+		<mx:NumericStepper id="widthNS" 			x="100"	y="157" 	width="72" 
+			value="1000"	maximum="3000" />
+			
+		<mx:Label 			text="height"			x="52" 	y="187"  />	
+		<mx:NumericStepper 	id="heightNS" 			x="100"	y="185"		width="72" 
+			value="1000"	maximum="3000"  />
+		 
+		<mx:Label 			text="steps"			x="57" 	y="215"  /> 
+		<mx:NumericStepper	id="stepNS" 			x="100"	y="213" 
+			value="300" 	maximum="3000" />
+		
+		<mx:Label  			text="rate" 			x="65" 	y="243"/>
+		<mx:NumericStepper 	id="rateNS" 			x="100"	y="241" 
+			value="100"		maximum="3000" />
+			
+		<mx:Label  			text="jump distance" 	x="9" 	y="270" />
+		<mx:NumericStepper 	id="jumpNS" 			x="100" y="268"  
+			value="50"		maximum="3000" />
+		
+		<mx:Label 			x="25" 	y="299" text="color range" />
+		<mx:ColorPicker 	x="100" y="295" id="startCP" selectedColor="#848181"  />
+		<mx:Label 			x="126"	y="299" text="to" />
+		<mx:ColorPicker 	x="149"	y="295" id="endCP" />
+		
+		<mx:Button 			label="reset settings" 	bottom="40" right="10" 
+			click="resetConstraints()"/>
+		<mx:Button 			label="add item"		bottom="70" right="10" 
+			click="addItem()"/>
+		<mx:Button 			label="canvas only"		bottom="10" right="10" 
+			click="currentState='canvasOnly'"/>
+		
+		<mx:Label 			text="line width" 		x="10" 		y="332"  />
+		<mx:NumericStepper 	id="LineWidthFromNS"	x="10"		y="351" maximum="150" 	value="0"  		stepSize=".01"/>
+		<mx:Label 			text="to"				x="82" 		y="353" />
+		<mx:NumericStepper 	id="LineWidthToNS" 		x="106"		y="351" maximum="150" 	value="3.00"   	stepSize=".01"/>
+		
+		<mx:Label 			text="alpha" 			x="10"		y="383"  />
+		<mx:NumericStepper 	id="AlphaFromNS"		x="10" 		y="406" maximum="150" 	value="0"  		stepSize=".01"/>
+		<mx:Label 			text="to"				x="82"		y="408" />
+		<mx:NumericStepper 	id="AlphaToNS" 			x="106" 	y="406" maximum="150" 	value="3.00"   stepSize=".01"/>
+
 	</mx:Canvas>
 	
 	<mx:Script>
@@ -86,7 +92,7 @@
 			private function resetConstraints():void{
 				widthNS.value 		= this.stage.width;
 				heightNS.value 		= this.stage.height;
-				iterationsNS.value	= 300;
+				stepNS.value		= 300;
 				rateNS.value		= 100;
 			}
 			
@@ -106,9 +112,11 @@
 				trace(describeType(CurvyScribbleDecorator));
 				
 				artItem = new ArtSprite();
-				artItem = new CurvyScribbleDecorator(artItem,color,50,widthNS.value,heightNS.value,LineWidthFromNS.value,LineWidthToNS.value);
 				
-				artItem = new RepeaterDecorator(artItem,300);
+				
+				artItem = new CurvyScribbleDecorator(artItem,color,jumpNS.value,widthNS.value,heightNS.value,LineWidthFromNS.value,LineWidthToNS.value);
+				
+				artItem = new RepeaterDecorator(artItem,stepNS.value,rateNS.value);
 				
 				artItem.x = drawX;
 				artItem.y = drawY;

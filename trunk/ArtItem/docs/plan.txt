@@ -1,0 +1,16 @@
+planning
+
+All art items 
+- start on their own 0,0
+
+A drawing process can have the following variables
+
+- rate
+- steps
+- witdh restraint, height restraint,
+- movement pattern: random(jump range), any mathematically defined pattern
+- stroke(none, style)
+	- stroke style (color, stroke pattern(solid, dashed), stroke type (curved or straight), alpha range, width range)
+- point style(none, shape, bitmap)
+
+animations can be added to point shapes, strokes or the entire item
