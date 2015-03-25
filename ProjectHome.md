@@ -1,0 +1,1 @@
+This project contains a library of classes based off a root class called ArtItem. The flex framework is used to create user controls to set parameters for the items to be created. This project is intended to be a study of design patterns and visual randomness.
